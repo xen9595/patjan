@@ -1,23 +1,28 @@
-# Turning it on
+# patjan OS
 
-1. gcc -m32 -ffreestanding -nostartfiles -c src/kernel.c -o objs/kernel.o
-2. ld -m elf_i386 -T undefined/linker.ld -o iso/boot/kernel.elf objs/*.o
-3. grub-mkrescue -o myos.iso iso/boot/ 
-4. qemu-system-i386 -drive format=raw,file=myos.iso (INIT)
+Prosty system operacyjny w stylu edukacyjnym (kernel 32-bit, C + asm), zawierający:
+- prosty memory manager (bump allocator),
+- RAM-FS (prosty system plików w pamięci),
+- task scheduler (kooperacyjny lub z przerwaniami od PIT),
+- obsługę przerwań (IDT, klawiatura, PIT),
+- boot przez Multiboot v1 + GRUB.
 
-// Note: Compile the files you changed.
-// GCC: gcc -m32 -ffreestanding -nostartfiles -c src/kernel.c -o objs/kernel.o
-// NASM: nasm -f elf32 src/protmode_switch.s -o objs/protmode_switch.o
+# Wymagania
 
-# Recompile the files before initialization. (!!!)
+Na Ubuntu/Debian:
 
-When you're already in the GNU, you can type "ls".
-The first one to appear (in this case it's "(hd0)") has the kernel.elf file inside.
-To finally boot, you have to type:
+bash
+sudo apt update
+sudo apt install build-essential qemu-system-x86 grub-pc-bin xorriso mtools
 
-1. multiboot (hd0)/kernel.elf
-2. boot
+Na Arch/Manjaro
+sudo pacman -S base-devel qemu grub xorriso mtools
 
-At this point you already booted your kernel.
+# Uruchamianie
 
-# 
+1. make clean
+2. make
+3. make run
+
+Teraz system powinien sie odpalic
+Jeżeli się nie odpala, sprawdź ścieżki w #include w plikach z .c i .h
